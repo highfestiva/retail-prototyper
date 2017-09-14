@@ -1,0 +1,19 @@
+<html>
+<head>
+  <title>H&amp;M</title>
+  <link rel="shortcut icon" href="{{url_for('static', filename='favicon.ico')}}"/>
+  <link rel="stylesheet" href="/static/goofy.css" type="text/css"/>
+</head>
+<body>
+<div class="header"><h1>Welcome to H&amp;M!</h1></div>
+<div class="articles">
+  {% for article in articles %}
+  <div class="article">
+    <div><img src="{{article.imgs.0}}"/></div>
+    <p class="article-name">{{article.name}}</p>
+  </div>
+  {% endfor %}
+</div>
+<p>Whatever and then some</p>
+</body>
+</html>

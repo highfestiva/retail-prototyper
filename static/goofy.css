@@ -1,0 +1,24 @@
+h1,h2,h3,p {
+ font-family: 'Segoe UI Light', 'Calibri Light', 'Yu Gothic', Arial, sans-serif;
+ font-weight: 100;
+}
+.header {
+ display: table;
+ margin: auto;
+}
+.articles {
+ margin: auto;
+}
+.article {
+ display: inline-block;
+}
+.article-name {
+ position: absolute;
+ color: #fff;
+ background: #000;
+ padding: 0 20px 1px 4px;
+ border-radius: 3px;
+ transform: skew(20deg);
+ opacity: 0.8;
+ margin-top: -22px;
+}
