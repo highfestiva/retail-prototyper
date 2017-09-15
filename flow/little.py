@@ -4,8 +4,10 @@ import random
 
 
 def main():
-    arts = articles.tagged('kids',55)
-    highlights = random.sample(arts, 3)
+    arts = articles.tagged('ladies')
+    random.shuffle(arts)
+    arts = arts[:55]
+    highlights = random.sample(arts[:10]+arts[20:30]+arts[45:55], 3)
     article_groups = []
     current_group = []
     for a in arts:

@@ -1,5 +1,4 @@
 import json
-import random
 
 
 all_articles = {}
@@ -30,14 +29,13 @@ def find(articleId):
 	return all_articles.get(articleId)
 
 
-def tagged(tag, cnt=60):
+def tagged(tag, cnt=1000):
     articles = []
     for art in all_articles.values():
         if tag in art['tags']:
             articles += [art]
             if len(articles) >= cnt:
                 break
-    random.shuffle(articles)
     return articles
 
 
