@@ -1,4 +1,5 @@
 import json
+import random
 
 
 all_articles = {}
@@ -36,6 +37,7 @@ def tagged(tag, cnt=60):
             articles += [art]
             if len(articles) >= cnt:
                 break
+    random.shuffle(articles)
     return articles
 
 

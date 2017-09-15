@@ -1,0 +1,30 @@
+<html>
+<head>
+  <title>Main</title>
+  <link rel="shortcut icon" href="/static/favicon.ico"/>
+  <link rel="stylesheet" href="/static/little.css" type="text/css"/>
+</head>
+<body>
+<div class="header"><h1>Retail prototype 'little'!</h1></div>
+<div class="articles">
+  {% for article_group in article_groups %}
+  <div class="article-group">
+    {% for article in article_group %}
+      {% if article_group|length == 1 %}
+        <div class="article article-big">
+      {% else %}
+        <div class="article article-small">
+      {% endif %}
+          <div><img src="{{article.imgs.0}}"/></div>
+          <p class="article-name">{{article.name}}</p>
+        </div>
+      {% if article == article_group.1 %}
+        <br/>
+      {% endif %}
+    {% endfor %}
+  </div>
+  {% endfor %}
+</div>
+<div class="foot">Kids and so forth <span>|</span> Waco <span>|</span> Hoolabaloo</div>
+</body>
+</html>

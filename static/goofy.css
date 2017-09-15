@@ -1,6 +1,7 @@
-h1,h2,h3,p {
+h1,h2,h3,p,div {
  font-family: 'Segoe UI Light', 'Calibri Light', 'Yu Gothic', Arial, sans-serif;
  font-weight: 100;
+ clear: both;
 }
 .header {
  display: table;
@@ -8,6 +9,7 @@ h1,h2,h3,p {
 }
 .articles {
  margin: auto;
+ width: 95%;
 }
 .article {
  display: inline-block;
@@ -18,7 +20,16 @@ h1,h2,h3,p {
  background: #000;
  padding: 0 20px 1px 4px;
  border-radius: 3px;
- transform: skew(20deg);
+ transform: skew(-15deg);
  opacity: 0.8;
  margin-top: -22px;
+}
+.foot {
+    color: #999;
+    text-align: center;
+	margin: 20px;
+}
+.foot>span {
+    color: #eee;
+	margin: 5px;
 }

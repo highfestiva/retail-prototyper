@@ -1,11 +1,11 @@
 <html>
 <head>
-  <title>H&amp;M</title>
-  <link rel="shortcut icon" href="{{url_for('static', filename='favicon.ico')}}"/>
+  <title>Main</title>
+  <link rel="shortcut icon" href="/static/favicon.ico"/>
   <link rel="stylesheet" href="/static/goofy.css" type="text/css"/>
 </head>
 <body>
-<div class="header"><h1>Welcome to H&amp;M!</h1></div>
+<div class="header"><h1>Retail prototype 'goofy'!</h1></div>
 <div class="articles">
   {% for article in articles %}
   <div class="article">
@@ -14,6 +14,6 @@
   </div>
   {% endfor %}
 </div>
-<p>Whatever and then some</p>
+<div class="foot">Whatever and then some <span>|</span> More <span>|</span> Contact</div>
 </body>
 </html>
