@@ -7,7 +7,7 @@ from urllib.parse import quote
 
 
 urlencode = lambda url: quote(url, safe='')
-urlbase = 'http://api.hm.com/v2/se/sv/products/display?categories=%s&concealCategories=true&pageSize=300&page=1&deviceType=%s'
+urlbase = 'http://api.hm.com/v2/se/sv/products/display?categories=%s&concealCategories=true&pageSize=70&page=1&deviceType=%s'
 device = 'DESKTOP'
 
 
@@ -24,7 +24,7 @@ def redirect_img(article, idx, url):
     return url
 
 
-for category in ['ladies/tops', 'kids/newborn']:
+for category in ['ladies/tops', 'ladies/dresses', 'kids/newborn', 'men/trousers']:
     url = urlbase % (urlencode(category), device)
     categories = list(set([category] + category.split('/')))
     r = requests.get(url).json()

@@ -1,13 +1,14 @@
 import articles
-from flask import render_template
+from flask import render_template, session
 import random
 
 
-def main():
-    arts = articles.tagged('ladies')
+def main(category, article_xform):
+    arts = articles.tagged(category)
     random.shuffle(arts)
+    arts = article_xform(arts)
     arts = arts[:55]
-    highlights = random.sample(arts[:10]+arts[20:30]+arts[45:55], 3)
+    highlights = random.sample(arts, 3)
     article_groups = []
     current_group = []
     for a in arts:
@@ -20,4 +21,4 @@ def main():
                 current_group = []
     if current_group:
         article_groups += [current_group]
-    return render_template('little.html', article_groups=article_groups)
+    return render_template('little.html', article_groups=article_groups, user=session.get('user'))

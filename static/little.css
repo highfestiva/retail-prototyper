@@ -3,6 +3,15 @@ h1,h2,h3,p,div {
 	font-weight: 100;
 	clear: both;
 }
+.avatar {
+	position: absolute;
+	height: 50px;
+	top: 16px;
+	left: 19px;
+	border-radius: 30px;
+	border: 3px solid #988088;
+	z-index: 10;
+}
 .header {
 	transform: translateX(-50%) rotate(-90deg) translate(-50%,39px);
 	position: fixed;
