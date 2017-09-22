@@ -19,7 +19,8 @@ store = None
 
 
 def create_user(name, fullname, pic, gender='f', age=None):
-    return dict(name=name, fullname=fullname, avatar=pic, gender=gender, age=age)
+    logged_in = (fullname != '')
+    return dict(name=name, fullname=fullname, avatar=pic, gender=gender, age=age, logged_in=logged_in)
 
 
 @app.route('/favicon.ico')
@@ -39,20 +40,28 @@ def login():
     return redirect(google_login.authorization_url())
 
 
+@app.route('/logout')
+def logout():
+    reset_user()
+    return redirect('/')
+
+
+def reset_user():
+    session['user'] = create_user('Sign in', '', '/static/avatar.png')
+
+
 def userpick(user, func):
-    if not user:
-        user = create_user(None, None)
     return eval(open('data/'+func+'-'+store+'.py').read(), globals(), locals())
 
 
 def get_flow(category):
     if not 'user' in session:
-        session['user'] = create_user('Anonymous', '', '/static/avatar.png')
+        reset_user()
     user = session['user']
     if 'flow' not in session:
         session['flow'] = userpick(user, 'flow')
     if not category:
-        category = userpick(user, 'category')
+        category = userpick(user, 'defaultcategory')
     article_xform = lambda x:x
     return session['flow'], category, article_xform
 

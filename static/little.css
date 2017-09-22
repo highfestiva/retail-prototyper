@@ -3,6 +3,24 @@ h1,h2,h3,p,div {
 	font-weight: 100;
 	clear: both;
 }
+.user > .name {
+    position: absolute;
+    color: #999;
+    top: 73px;
+    left: 1px;
+	width: 93px;
+    z-index: 10;
+	text-align: center
+}
+.user > .logout {
+	position: absolute;
+	top: 92px;
+	left: 1px;
+	width: 93px;
+	z-index: 10;
+	text-align: center;
+	font-size: 11px;
+}
 .avatar {
 	position: absolute;
 	height: 50px;
