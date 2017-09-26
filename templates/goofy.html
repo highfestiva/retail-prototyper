@@ -13,12 +13,18 @@
 </div>
 {% if not user['logged_in'] %}</a>{% endif %}
 <div class="header"><h1>Retail prototype 'goofy'!</h1></div>
+<div class="cart">
+  <img src="/static/goofy-cart.png"/>
+</div>
 <div class="articles">
   {% for article in articles %}
-  <div class="article">
-    <div class="add"></div>
-    <div><img src="{{article.imgs.0}}"/></div>
-    <p class="article-name">{{article.name}}</p>
+  <div class="article-container">
+    <a class="article" href="">
+      <div class="add"></div>
+      <div><img src="{{article.imgs.0}}"/></div>
+      <p class="article-name">{{article.name}}</p>
+    </a>
+    <div class="article-description">{{article.description}}</div>
   </div>
   {% endfor %}
 </div>

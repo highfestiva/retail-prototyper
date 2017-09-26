@@ -5,14 +5,22 @@
   <link rel="stylesheet" href="/static/little.css" type="text/css"/>
 </head>
 <body>
-{% if not user['logged_in'] %}<a href="/login">{% endif %}
-<div class="user">
-  <img class="avatar" src="{{user['avatar']}}"/>
-  <span class="name">{{user['name']}}</span>
-  {% if user['logged_in'] %}<a class="logout" href="/logout">Sign out</a>{% endif %}
+
+<div class="header">
+  <div class="cart">
+    <img src="/static/little-cart.png"/>
+  </div>
+  <h1>Retail prototype 'little'!</h1>
+  <div class="user">
+    {% if not user['logged_in'] %}<a href="/login">{% endif %}
+    <img class="avatar" src="{{user['avatar']}}"/>
+    <br/>
+    <span class="name">{{user['name']}}</span>
+    {% if not user['logged_in'] %}</a>{% endif %}
+    {% if user['logged_in'] %}<br/><a class="logout" href="/logout">Sign out</a>{% endif %}
+  </div>
 </div>
-{% if not user['logged_in'] %}</a>{% endif %}
-<div class="header"><h1>Retail prototype 'little'!</h1></div>
+
 <div class="articles">
   {% for article_group in article_groups %}
   <div class="article-group">

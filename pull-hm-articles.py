@@ -25,6 +25,11 @@ def redirect_img(article, idx, url):
     return url
 
 
+def get_desc(prodid):
+    url = 'http://www.hm.com/se/sv/product/quicklook/json/' + prodid
+    return requests.get(url).json()['product']['description']
+
+
 for category in ['ladies/tops', 'ladies/dresses', 'kids/newborn', 'men/trousers']:
     url = urlbase % (urlencode(category), device)
     categories = list(set([category] + category.split('/')))
@@ -42,5 +47,7 @@ for category in ['ladies/tops', 'ladies/dresses', 'kids/newborn', 'men/trousers'
             continue
         for i,url in enumerate(a['imgs']):
             a['imgs'][i] = redirect_img(a, i, url)
+        prodid = article['articleCode'].partition('-')[0]
+        a['description'] = get_desc(prodid)
         articles.add(a)
     articles.save_articles()

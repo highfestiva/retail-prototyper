@@ -1,52 +1,56 @@
+html, body {
+	padding: 0;
+	margin: 0;
+}
 h1,h2,h3,p,div {
 	font-family: 'Segoe UI Light', 'Calibri Light', 'Yu Gothic', Arial, sans-serif;
 	font-weight: 100;
 	clear: both;
 }
-.user > .name {
-    position: absolute;
-    color: #999;
-    top: 73px;
-    left: 1px;
-	width: 93px;
-    z-index: 10;
-	text-align: center
-}
-.user > .logout {
-	position: absolute;
-	top: 92px;
-	left: 1px;
-	width: 93px;
-	z-index: 10;
-	text-align: center;
-	font-size: 11px;
-}
-.avatar {
-	position: absolute;
-	height: 50px;
-	top: 16px;
-	left: 19px;
-	border-radius: 30px;
-	border: 3px solid #988088;
-	z-index: 10;
-}
 .header {
-	transform: translateX(-50%) rotate(-90deg) translate(-50%,39px);
+	transform: translateX(-50%) rotate(-90deg) translate(-50%,38px);
 	position: fixed;
-	margin: 0;
-	padding: 0;
-	width: 100vh;
 	top: -48px;
-	border: 1px solid #000;
+	width: 100vh;
+	height: 90px;
+	background: #000;
 }
 .header>h1 {
 	margin: 0;
-	padding: 20px;
-	background: #000;
+	padding: 17px 0 0 30px;
 	color: #fff;
 	font-size: 40px;
 	text-align: center;
 }
+.cart {
+	position: absolute;
+	padding: 20px 12px;
+	right: 0;
+	transform: rotateZ(90deg);
+}
+.user {
+	position: absolute;
+	transform: rotateZ(90deg);
+	top: 0px;
+	left: 15px;
+	width: 88px;
+	text-align: center;
+}
+.user > a {
+	text-decoration: none;
+}
+.user > .name {
+	color: #999;
+}
+.user > .logout {
+	font-size: 11px;
+}
+.avatar {
+	height: 50px;
+	border-radius: 30px;
+	border: 3px solid #988088;
+}
+
 .articles {
 	margin: 0 0 0 90px;
 }
@@ -69,11 +73,12 @@ h1,h2,h3,p,div {
 	background: #fff5f5;
 	padding: 0 20px 1px 4px;
 	border-radius: 3px;
-	transform: translateX(80px) rotate(-90deg) translateX(50%) skew(-10deg);
+	transform: translateX(80px) rotate(-90deg) translateX(50%) skew(-5deg);
 	opacity: 0.7;
 	margin-top: -22px;
 	min-width: 200px;
 	text-align: center;
+	font-family: 'Segoe UI', 'Calibri', Arial, sans-serif;
 }
 .article-big > .article-name {
 	transform: translateX(120px) rotate(-45deg) translateX(70%);
