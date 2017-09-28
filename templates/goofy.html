@@ -3,6 +3,9 @@
   <title>Main</title>
   <link rel="shortcut icon" href="/static/favicon.ico"/>
   <link rel="stylesheet" href="/static/goofy.css" type="text/css"/>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+  <script src="/static/goofy.js"></script>
 </head>
 <body>
 {% if not user['logged_in'] %}<a href="/login">{% endif %}
@@ -19,11 +22,17 @@
 <div class="articles">
   {% for article in articles %}
   <div class="article-container">
-    <a class="article" href="">
+    <div class="article">
       <div class="add"></div>
-      <div><img src="{{article.imgs.0}}"/></div>
+      {% if article.imgs.1 %}
+      <div class="image-0"><img src="{{article.imgs.0}}"/></div>
+      <div class="image-1"><img src="{{article.imgs.1}}"/></div>
+      {% else %}
+      <div class="image"><img src="{{article.imgs.0}}"/></div>
+      {% endif %}
       <p class="article-name">{{article.name}}</p>
-    </a>
+      <p class="article-price">{{article.dispPrice}}</p>
+    </div>
     <div class="article-description">{{article.description}}</div>
   </div>
   {% endfor %}

@@ -11,7 +11,7 @@ h1,h2,h3,p,div {
 	transform: translateX(-50%) rotate(-90deg) translate(-50%,38px);
 	position: fixed;
 	top: -48px;
-	width: 100vh;
+	width: 101vh;
 	height: 90px;
 	background: #000;
 }

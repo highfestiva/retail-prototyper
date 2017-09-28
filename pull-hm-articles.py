@@ -38,7 +38,9 @@ for category in ['ladies/tops', 'ladies/dresses', 'kids/newborn', 'men/trousers'
         a = { 'name':      article['name'],
               'articleId': article['articleCode'],
               'tags':      categories,
-              'imgs':      [article['primaryImage']['url']] }
+              'imgs':      [article['primaryImage']['url']],
+              'dispPrice': article['priceInfo']['formattedPrice'],
+              'price':     article['priceInfo']['price'],  }
         if 'secondaryImage' in article:
             a['imgs'] += [article['secondaryImage']['url']]
         existing = articles.find(a['articleId'])
