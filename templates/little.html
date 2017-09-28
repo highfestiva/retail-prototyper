@@ -5,6 +5,7 @@
   <link rel="stylesheet" href="/static/little.css" type="text/css"/>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+  <script src="/static/common.js"></script>
   <script src="/static/little.js"></script>
 </head>
 <body>
@@ -29,9 +30,9 @@
   <div class="article-group">
     {% for article in article_group %}
       {% if article_group|length == 1 %}
-        <div class="article article-big">
+        <div class="article article-big" data-articleId="{{article.articleId}}">
       {% else %}
-        <div class="article article-small">
+        <div class="article article-small" data-articleId="{{article.articleId}}">
       {% endif %}
           <div><img src="{{article.imgs.0}}"/></div>
           <p class="article-name">{{article.name}}</p>

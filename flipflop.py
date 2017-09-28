@@ -84,6 +84,17 @@ def root(category='', subcat=''):
     return r
 
 
+@app.route('/cart', methods=['PUT'])
+def put_in_cart():
+    cart = session.get('cart')
+    if not cart:
+        cart = []
+    article_id = request.values.get('articleId')
+    cart += [article_id]
+    session['cart'] = cart
+    return 'ok'
+
+
 if __name__ == '__main__':
     if len(sys.argv) < 2:
         print('required arg: store (for instance "hm")')

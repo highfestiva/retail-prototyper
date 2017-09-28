@@ -5,6 +5,7 @@
   <link rel="stylesheet" href="/static/goofy.css" type="text/css"/>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+  <script src="/static/common.js"></script>
   <script src="/static/goofy.js"></script>
 </head>
 <body>
@@ -22,7 +23,7 @@
 <div class="articles">
   {% for article in articles %}
   <div class="article-container">
-    <div class="article">
+    <div class="article article-small" data-articleId="{{article.articleId}}">
       <div class="add"></div>
       {% if article.imgs.1 %}
       <div class="image-0"><img src="{{article.imgs.0}}"/></div>
