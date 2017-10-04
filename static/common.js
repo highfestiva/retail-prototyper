@@ -1,5 +1,12 @@
-function placeInCart(node, topOff, leftOff, height, endOpacity, cartTop, cartLeft, endHeight, animTime) {
+function placeInCart(node, complete, topOff, leftOff, height, endOpacity, cartTop, cartLeft, endHeight, animTime) {
   var articleId = node.attr('data-articleId');
+  $.ajax({
+    type: 'PUT',
+    url: '/cart',
+    contentType: 'application/json',
+    data: {articleId:articleId},
+    complete: complete
+  });
   var cart = $('.cart')[0];
   var dragImg = node.find('img').last();
   var imgclone = dragImg.clone()
@@ -20,11 +27,5 @@ function placeInCart(node, topOff, leftOff, height, endOpacity, cartTop, cartLef
     'height': endHeight
   }, animTime, 'easeOutCubic', function () {
     $(this).detach();
-    $.ajax({
-      type: 'PUT',
-      url: '/cart',
-      contentType: 'application/json',
-      data: {articleId:articleId}
-    });
   });
 }

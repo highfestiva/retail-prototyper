@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
-from flask import Flask, make_response, redirect, request, send_from_directory, session
+import articles
+from flask import Flask, make_response, redirect, render_template, request, send_from_directory, session
 from flask_oauth2_login import GoogleLogin
 import os
 import random
@@ -84,12 +85,25 @@ def root(category='', subcat=''):
     return r
 
 
-@app.route('/cart', methods=['PUT'])
-def put_in_cart():
+@app.route('/cart', methods=['GET'])
+def get_cart():
     cart = session.get('cart')
     if not cart:
         cart = []
-    article_id = request.values.get('articleId')
+    print('cart:', cart)
+    arts = reversed([articles.find(a) for a in cart])
+    return render_template('cart.html', articles=arts)
+
+
+@app.route('/cart', methods=['PUT'])
+def put_in_cart():
+    article_id = request.data.decode().partition('=')[2]
+    print('add to cart:', article_id)
+    if not article_id:
+        return 'nok', 400
+    cart = session.get('cart')
+    if not cart:
+        cart = []
     cart += [article_id]
     session['cart'] = cart
     return 'ok'

@@ -1,0 +1,13 @@
+<div class="cart-articles">
+  {% for article in articles %}
+  <div class="cart-article" data-articleId="{{article.articleId}}">
+    <div class="cart-image"><img src="{{article.imgs[-1]}}"/></div>
+    <div class="cart-article-name">{{article.name}}</div>
+    <div class="cart-article-price">{{article.dispPrice}}</div>
+    <div class="cart-article-button cart-article-button-a"></div>
+    <div class="cart-article-button cart-article-button-b"></div>
+    <div class="cart-article-button cart-article-button-c"></div>
+    <div class="cart-article-button cart-article-button-d"></div>
+  </div>
+  {% endfor %}
+</div>
