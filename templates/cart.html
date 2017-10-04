@@ -11,3 +11,18 @@
   </div>
   {% endfor %}
 </div>
+
+<form class="open-payment" action="//pay" method="POST">
+  <script
+    src="https://checkout.stripe.com/checkout.js"
+    class="stripe-button"
+    data-key="pk_test_6pRNASCoBOKtIshFeQd4XMUh"
+    data-amount="{{amount}}"
+    data-name="Retailer"
+    data-description="Creditcard payment"
+    data-image="http://icons.iconarchive.com/icons/petalart/free-shopping/256/shopping-bag-icon.png"
+    data-locale="{{locale}}"
+    data-currency="{{currency}}"
+    data-zip-code="true">
+  </script>
+</form>

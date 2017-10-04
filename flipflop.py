@@ -17,6 +17,8 @@ app.config.update(
 )
 google_login = GoogleLogin(app)
 store = None
+locale = 'auto'
+currency = 'auto'
 
 
 def create_user(name, fullname, pic, gender='f', age=None):
@@ -91,8 +93,9 @@ def get_cart():
     if not cart:
         cart = []
     print('cart:', cart)
-    arts = reversed([articles.find(a) for a in cart])
-    return render_template('cart.html', articles=arts)
+    arts = list(reversed([articles.find(a) for a in cart]))
+    amount = sum(a['price'] for a in arts) * 100
+    return render_template('cart.html', articles=arts, amount=amount, currency='SEK', locale='sv')
 
 
 @app.route('/cart', methods=['PUT'])
@@ -110,8 +113,11 @@ def put_in_cart():
 
 
 if __name__ == '__main__':
-    if len(sys.argv) < 2:
-        print('required arg: store (for instance "hm")')
+    if len(sys.argv) < 4:
+        print('required args: store language currency')
+        print('Example:       hm    sv       SEK')
         sys.exit(1)
     store = sys.argv[1]
+    locale = sys.argv[2]
+    currency = sys.argv[3]
     app.run(host='0.0.0.0', port=9000, threaded=True)

@@ -1,16 +1,14 @@
 function showCart() {
   $.get('/cart', function(data) {
     $('.cart-pop-content').html(data);
-    $('.cart-pop').fadeToggle();
+    $('.cart-pop').fadeIn();
   });
 }
 
 function showCartAutoHide() {
   showCart();
   setTimeout(function() {
-    if ($('.cart-pop').is(':visible')) {
-      $('.cart-pop').fadeToggle();
-    }
+    $('.cart-pop').fadeOut();
   }, 10000);
 }
 
