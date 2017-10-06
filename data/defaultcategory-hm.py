@@ -1,1 +1,0 @@
-'ladies' if user['gender'] == 'f' else 'men'

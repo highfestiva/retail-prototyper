@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 
 import articles
+import behavior
+from collections import OrderedDict
 from flask import Flask, make_response, redirect, render_template, request, send_from_directory, session
 from flask_oauth2_login import GoogleLogin
 import os
@@ -16,9 +18,9 @@ app.config.update(
     GOOGLE_LOGIN_CLIENT_SECRET = os.environ['GOOGLE_CSEC'],
 )
 google_login = GoogleLogin(app)
-store = None
 locale = 'auto'
 currency = 'auto'
+settings = 'Layout Font Color Size Category Ordering Images'
 
 
 def create_user(name, fullname, pic, gender='f', age=None):
@@ -53,38 +55,21 @@ def reset_user():
     session['user'] = create_user('Sign in', '', '/static/avatar.png')
 
 
-def userpick(user, func):
-    return eval(open('data/'+func+'-'+store+'.py').read(), globals(), locals())
-
-
-def get_flow(category):
-    if not 'user' in session:
-        reset_user()
-    user = session['user']
-    if 'flow' not in session:
-        session['flow'] = userpick(user, 'flow')
-    if not category:
-        category = userpick(user, 'defaultcategory')
-    article_xform = lambda x:x
-    return session['flow'], category, article_xform
-
-
 @app.route('/')
-@app.route('/<category>')
-@app.route('/<category>/<subcat>')
-def root(category='', subcat=''):
-    if subcat:
-        category += '/' + subcat
-    flow, category, article_xform = get_flow(category)
-    flow_set = flow = request.cookies.get('flow')
-    if not flow:
-        flow = random.choice('goofy little'.split())
-    mod = getattr(__import__('flow.'+flow), flow)
-    r = getattr(mod, 'main')(category, article_xform)
-    if not flow_set:
-        r = make_response(r)
-        r.set_cookie('flow', flow)
-    return r
+def root():
+    params = OrderedDict([(name,10) for name in settings.split()])
+    return render_template('main.html', settings=params)
+
+
+@app.route('/content', methods=['GET','POST'])
+def content():
+    if not session.get('user'):
+        reset_user()
+    params = { name:int(request.values.get(name,0)) for name in settings.lower().split() }
+    theme = behavior.theme(params)
+    css = behavior.css(params)
+    arts = behavior.get_articles(params)
+    return render_template('content.html', theme=theme, css=css, articles=arts, user=session.get('user'))
 
 
 @app.route('/cart', methods=['GET'])
@@ -92,9 +77,9 @@ def get_cart():
     cart = session.get('cart')
     if not cart:
         cart = []
-    print('cart:', cart)
     arts = list(reversed([articles.find(a) for a in cart]))
     amount = sum(a['price'] for a in arts) * 100
+    print('cart:', arts)
     return render_template('cart.html', articles=arts, amount=amount, currency='SEK', locale='sv')
 
 
@@ -113,11 +98,10 @@ def put_in_cart():
 
 
 if __name__ == '__main__':
-    if len(sys.argv) < 4:
-        print('required args: store language currency')
-        print('Example:       hm    sv       SEK')
+    if len(sys.argv) != 3:
+        print('required args:  language currency')
+        print('example:        sv       SEK')
         sys.exit(1)
-    store = sys.argv[1]
-    locale = sys.argv[2]
-    currency = sys.argv[3]
+    locale = sys.argv[1]
+    currency = sys.argv[2]
     app.run(host='0.0.0.0', port=9000, threaded=True)

@@ -39,4 +39,11 @@ def tagged(tag, cnt=1000):
     return articles
 
 
+def all_tags():
+    tags = set()
+    for art in all_articles.values():
+        tags.update(art['tags'])
+    return sorted(tags)
+
+
 load_articles()

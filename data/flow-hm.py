@@ -1,1 +1,0 @@
-random.choice(['goofy', 'little'])

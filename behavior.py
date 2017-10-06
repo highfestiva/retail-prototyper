@@ -1,17 +1,36 @@
+import articles
+import random
+
+
+_css = '''
+html,body,h1,h2,h3,p,div,span {
+	font-family: {font_family};
+    margin: 0;
+    padding: 0;
+}
 h1,h2,h3,p,div {
-	font-family: 'Segoe UI Light', 'Calibri Light', 'Yu Gothic', Arial, sans-serif;
-	font-weight: 100;
+    font-weight: 100;
+    margin: 0;
+    padding: 0;
+}
+.bar {
+    transform: {bar_transform};
+    z-index: 10;
+}
+.user {
+    position: relative;
+    top: 6px;
 }
 .user > .name {
-	position: absolute;
-	top: 20px;
-	left: 75px;
-	color: #999;
+    position: relative;
+    top: 10px;
+    left: 78px;
+    color: #999;
 }
 .user > .logout {
-	position: absolute;
-	top: 40px;
-	left: 75px;
+	position: relative;
+	top: 20px;
+	left: 78px;
 	font-size: 11px;
 }
 .avatar {
@@ -22,12 +41,23 @@ h1,h2,h3,p,div {
 	border: 4px solid #ddd;
 }
 .header {
-	display: table;
-	margin: auto;
+    text-align: center;
+    margin-top: -20px;
+    width: 100%;
+    height: 64px;
+    display: table;
+}
+.header > h1 {
+    display: table-cell;
+    vertical-align: middle;
+}
+.cart-container {
+	position: fixed;
+	right: 0;
+    z-index: 10;
 }
 .cart {
-	position: fixed;
-	top: 0;
+	position: absolute;
 	right: 0;
 	padding: 15px 25px;
 	background-color: #fff;
@@ -52,17 +82,17 @@ h1,h2,h3,p,div {
 .article {
 	position: relative;
 }
-.article > .add, .article > .article-price {
+.article > .add, .article > .article-price, .article > .article-description {
 	visibility: hidden;
 }
-.article:hover > .add, .article:hover > .article-price {
+.article:hover > .add, .article:hover > .article-price, .article:hover > .article-description {
 	visibility: visible;
 }
 .article:active > .add {
 	border-color: #0a4;
 	background: #0a4;
 }
-.article-name, .article-price {
+.article-name, .article-price, .article-description {
 	position: absolute;
 	color: #fff;
 	background: #000;
@@ -71,9 +101,17 @@ h1,h2,h3,p,div {
 	transform: skew(-15deg);
 	opacity: 0.8;
 	margin-top: -22px;
+	z-index: 1;
+}
+.article-name {
+	left: 0;
 }
 .article-price {
 	right: 0;
+}
+.article-description {
+	margin-top: 5px;
+	transform: none;
 }
 .add {
 	height: 40px;
@@ -82,7 +120,7 @@ h1,h2,h3,p,div {
 	border: 8px solid #0c7;
 	background: #0c7;
 	border-radius: 11px 0 11px 20px;
-	margin: -1 0 0 291px;
+	margin: -1px 0 0 291px;
 	z-index: 5;
 }
 .add:hover {
@@ -127,9 +165,6 @@ h1,h2,h3,p,div {
 	opacity: 1;
 	transition: opacity 0.4s;
 }
-.article-description {
-	display: none;
-}
 .foot {
 	color: #999;
 	text-align: center;
@@ -140,21 +175,22 @@ h1,h2,h3,p,div {
 	margin: 5px;
 }
 
+.cart-pop-content {
+    padding: 10px;
+}
 .cart-pop {
-	position: fixed;
-	top: 73px;
+	position: relative;
+    top: 70px;
 	right: 10px;
 	background: #fff;
 	border-radius: 20px;
 	border: 3px solid #555;
 	padding: 20px;
-	display: none;
 	z-index: 20;
 }
 .cart-pop-arrow {
-	position: fixed;
-	top: 63px;
-	right: 40px;
+	margin: -33px 6px;
+	float: right;
 	width: 0; 
 	height: 0; 
 	border-left: 10px solid transparent;
@@ -194,8 +230,47 @@ h1,h2,h3,p,div {
 .cart-article-button-d {
 	background: #0d0644;
 }
-
 .open-payment {
-	float: right;
-	margin: 20px 0 0 0;
-}
+    margin: 0;
+    text-align: right;
+}'''
+
+
+def get_articles(params):
+    tags = articles.all_tags()
+    # Category selection.
+    category = params['category']
+    cnt_idx = category % len(tags)
+    if cnt_idx < len(tags):
+        tag = tags[category]
+        arts = articles.tagged(tag, 300)
+    else:
+        arts = [a for a in articles.all_articles][:300]
+    # Ordering.
+    ordering = params['ordering']
+    if ordering == 0:
+        pass
+    elif ordering == 1:
+        arts = list(reversed(arts))
+    elif ordering == 2:
+        random.shuffle(arts)
+    else:
+        arts = arts[10*ordering:]
+    return arts[:20]
+
+
+def css(params):
+    layout = params['layout']
+    font = params['font']
+    try:    bar_transform = 'none#translateX(-50%) rotate(-90deg) translate(-50%,38px)'.split('#')[layout]
+    except: bar_transform = 'none'
+    try:    font_family = "'Segoe UI Light'#'Calibri Light'#'Yu Gothic'#Arial#'Times New Roman'#'Courier New'#'Lucinda Console'#Gothic".split('#')[font]
+    except: font_family = "sans-serif"
+    return _css.replace('{font_family}', font_family).replace('{bar_transform}', bar_transform)
+
+
+def theme(params):
+    color = params['color']
+    if color&1:
+        return 'dark'
+    return 'light'

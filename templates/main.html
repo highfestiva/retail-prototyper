@@ -1,0 +1,24 @@
+<html>
+<head>
+  <title>Retailer</title>
+  <link rel="shortcut icon" href="/static/favicon.ico"/>
+  <link rel="stylesheet" href="/static/main.css" type="text/css"/>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+  <script src="/static/main.js"></script>
+</head>
+<body>
+<form class="sliders" id="sliders">
+  {% for slider, count in settings.items() %}
+  <div class="slider-container">
+    <label class="slider-label" for="{{slider|lower}}">{{slider}}</label>
+    <input type="range" min="0" max="{{count}}" value="0" class="slider" id="{{slider|lower}}" name="{{slider|lower}}"/>
+  </div>
+  {% endfor %}
+</form>
+<div class="content-container">
+  <iframe class="retail-content"/>
+  </iframe>
+</div>
+</body>
+</html>

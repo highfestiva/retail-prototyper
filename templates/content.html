@@ -1,0 +1,50 @@
+<html>
+<body>
+<style>
+  {{css|safe}}
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+<script src="/static/cart.js"></script>
+
+<div class="bar">
+  <div class="cart-container">
+    <div class="cart">
+      <img src="/static/{{theme}}-cart.png"/>
+    </div>
+    <div class="cart-pop">
+      <div class="cart-pop-arrow"></div>
+      <div class="cart-pop-content"></div>
+    </div>
+  </div>
+  {% if not user['logged_in'] %}<a href="/login">{% endif %}
+  <div class="user">
+    <img class="avatar" src="{{user['avatar']}}"/>
+    <span class="name">{{user['name']}}</span>
+    {% if user['logged_in'] %}<a class="logout" href="/logout">Sign out</a>{% endif %}
+  </div>
+  {% if not user['logged_in'] %}</a>{% endif %}
+  <div class="header"><h1>Retail prototype</h1></div>
+</div>
+<div class="articles">
+  {% for article in articles %}
+  <div class="article-container">
+    <div class="article article-small" data-articleId="{{article.articleId}}">
+      <div class="add"></div>
+      {% if article.imgs.1 %}
+      <div class="image-0"><img src="{{article.imgs.0}}"/></div>
+      <div class="image-1"><img src="{{article.imgs.1}}"/></div>
+      {% else %}
+      <div class="image"><img src="{{article.imgs.0}}"/></div>
+      {% endif %}
+      <p class="article-name">{{article.name}}</p>
+      <p class="article-price">{{article.dispPrice}}</p>
+      <p class="article-description">{{article.description}}</p>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+<div class="foot">Whatever and then some <span>|</span> More <span>|</span> Contact</div>
+
+</body>
+</html>
