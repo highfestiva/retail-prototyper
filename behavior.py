@@ -4,9 +4,10 @@ import random
 
 _css = '''
 html,body,h1,h2,h3,p,div,span {
-	font-family: {font_family};
+	font-family: {font-family};
     margin: 0;
     padding: 0;
+    color: #{color1};
 }
 h1,h2,h3,p,div {
     font-weight: 100;
@@ -14,8 +15,10 @@ h1,h2,h3,p,div {
     padding: 0;
 }
 .bar {
-    transform: {bar_transform};
+    transform: {bar-transform};
     z-index: 10;
+    {bar-setup};
+    background-color: #{color0};
 }
 .user {
     position: relative;
@@ -25,7 +28,7 @@ h1,h2,h3,p,div {
     position: relative;
     top: 10px;
     left: 78px;
-    color: #999;
+    color: #{color1};
 }
 .user > .logout {
 	position: relative;
@@ -53,23 +56,24 @@ h1,h2,h3,p,div {
 }
 .cart-container {
 	position: fixed;
-	right: 0;
-    z-index: 10;
+	{cart-align}: 0;
+    z-index: 20;
 }
 .cart {
 	position: absolute;
-	right: 0;
-	padding: 15px 25px;
-	background-color: #fff;
+	{cart-align}: 0;
+	padding: {cart-padding};
+	background-color: #{color0};
 	border-radius: 0 0 0 20px;
-	border: 3px solid #555;
+	border: {cart-border-col};
 	border-top: none;
 	border-right: none;
 	z-index: 10;
+    transform: {cart-transform};
 }
 .articles {
-	margin: auto;
-	width: 95%;
+	margin: {articles-margin};
+	width: 94%;
 }
 .article-container {
 	display: inline-block;
@@ -180,8 +184,8 @@ h1,h2,h3,p,div {
 }
 .cart-pop {
 	position: relative;
-    top: 70px;
-	right: 10px;
+    top: {cart-pop-top};
+	{cart-pop-horiz};
 	background: #fff;
 	border-radius: 20px;
 	border: 3px solid #555;
@@ -189,17 +193,14 @@ h1,h2,h3,p,div {
 	z-index: 20;
 }
 .cart-pop-arrow {
-	margin: -33px 6px;
-	float: right;
-	width: 0; 
-	height: 0; 
-	border-left: 10px solid transparent;
-	border-right: 10px solid transparent;
-	border-bottom: 10px solid #555;
+	width: 0;
+	height: 0;
+    {cart-pop-arrow-setup}
 }
 .cart-article > div {
 	display: inline-block;
 	vertical-align: middle;
+    color: #555;
 }
 .cart-article-name {
     width: 150px;
@@ -236,6 +237,29 @@ h1,h2,h3,p,div {
 }'''
 
 
+bar_setup_css = '''
+    position: fixed;
+    width: 101vh;
+    height: 76px;
+    margin-top: -38px;'''
+
+
+cart_pop_arrow_top = '''
+	margin: -33px 6px;
+	float: right;
+	border-left: 10px solid transparent;
+	border-right: 10px solid transparent;
+	border-bottom: 10px solid #555;'''
+
+
+cart_pop_arrow_left = '''
+	margin: -5px -33px;
+	float: left;
+	border-top: 10px solid transparent;
+	border-bottom: 10px solid transparent;
+	border-right: 10px solid #555;'''
+
+
 def get_articles(params):
     tags = articles.all_tags()
     # Category selection.
@@ -260,13 +284,23 @@ def get_articles(params):
 
 
 def css(params):
+    ss = _css
     layout = params['layout']
     font = params['font']
-    try:    bar_transform = 'none#translateX(-50%) rotate(-90deg) translate(-50%,38px)'.split('#')[layout]
-    except: bar_transform = 'none'
-    try:    font_family = "'Segoe UI Light'#'Calibri Light'#'Yu Gothic'#Arial#'Times New Roman'#'Courier New'#'Lucinda Console'#Gothic".split('#')[font]
-    except: font_family = "sans-serif"
-    return _css.replace('{font_family}', font_family).replace('{bar_transform}', bar_transform)
+    col = params['color']
+    ss = idx_pick(ss, 'bar-transform',          layout,     'none~translateX(-50%) rotate(-90deg) translate(-50%,38px)')
+    ss = idx_pick(ss, 'bar-setup',              layout,     '~'+bar_setup_css)
+    ss = idx_pick(ss, 'cart-align',             layout,     'right~left')
+    ss = idx_pick(ss, 'cart-padding',           layout,     '15px 25px~10px 3px')
+    ss = idx_pick(ss, 'cart-border-col',        layout,     '3px solid #555~none')
+    ss = idx_pick(ss, 'cart-pop-top',           layout,     '70px~10px')
+    ss = idx_pick(ss, 'cart-pop-horiz',         layout,     'right: 10px~left: 80px')
+    ss = idx_pick(ss, 'cart-pop-arrow-setup',   layout,     cart_pop_arrow_top + '~' + cart_pop_arrow_left)
+    ss = idx_pick(ss, 'articles-margin',        layout,     'auto~0 0 0 100px')
+    ss = idx_pick(ss, 'color0',                 col//2%4,   'fff~222~fa9~fcf')
+    ss = idx_pick(ss, 'color1',                 col//2%4,   '222~fff~422~424')
+    ss = idx_pick(ss, 'font-family',            font,       "'Segoe UI Light'~'Calibri Light'~'Yu Gothic'~Arial~'Times New Roman'~'Courier New'~'Lucinda Console'~Gothic~sans-serif")
+    return ss
 
 
 def theme(params):
@@ -274,3 +308,12 @@ def theme(params):
     if color&1:
         return 'dark'
     return 'light'
+
+
+def idx_pick(ss, name, idx, alternatives):
+    alts = alternatives.split('~')
+    try:
+        outp = alts[idx]
+    except:
+        outp = alts[0]
+    return ss.replace('{%s}'%name, outp)

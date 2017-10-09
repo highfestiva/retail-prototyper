@@ -28,7 +28,7 @@ function placeInCart(node, complete, topOff, leftOff, height, endOpacity, cartTo
     'height': height,
     'z-index': '100'
   })
-  .appendTo(_('html'))
+  .appendTo(_('.extras'))
   .animate({
     'opacity': endOpacity,
     'top': cart.getBoundingClientRect().top + cartTop,

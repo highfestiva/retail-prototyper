@@ -4,18 +4,20 @@
   {{css|safe}}
 </style>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 <script src="/static/cart.js"></script>
 
-<div class="bar">
-  <div class="cart-container">
-    <div class="cart">
-      <img src="/static/{{theme}}-cart.png"/>
-    </div>
-    <div class="cart-pop">
-      <div class="cart-pop-arrow"></div>
-      <div class="cart-pop-content"></div>
-    </div>
+<div class="cart-container">
+  <div class="cart">
+    <img src="/static/{{theme}}-cart.png"/>
   </div>
+  <div class="cart-pop">
+    <div class="cart-pop-arrow"></div>
+    <div class="cart-pop-content"></div>
+  </div>
+</div>
+
+<div class="bar">
   {% if not user['logged_in'] %}<a href="/login">{% endif %}
   <div class="user">
     <img class="avatar" src="{{user['avatar']}}"/>
@@ -25,6 +27,7 @@
   {% if not user['logged_in'] %}</a>{% endif %}
   <div class="header"><h1>Retail prototype</h1></div>
 </div>
+
 <div class="articles">
   {% for article in articles %}
   <div class="article-container">
@@ -44,6 +47,8 @@
   {% endfor %}
 </div>
 <div class="foot">Whatever and then some <span>|</span> More <span>|</span> Contact</div>
+
+<div class="extras"/>
 
 </body>
 </html>

@@ -6,10 +6,12 @@ function initSlider(slider) {
   var prevVal = {}
   slider.on('change mousemove', function () {
     var thisSlider = $(this);
-    if (thisSlider.val() != (prevVal[thisSlider.attr('id')] || 0)) {
-      prevVal[thisSlider.attr('id')] = thisSlider.val();
-      slider.first().trigger('slide');
-    }
+    setTimeout(function() {
+      if (thisSlider.val() != (prevVal[thisSlider.attr('id')] || 0)) {
+        prevVal[thisSlider.attr('id')] = thisSlider.val();
+        slider.first().trigger('slide');
+      }
+    }, 1);
   });
 }
 
