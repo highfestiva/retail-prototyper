@@ -9,6 +9,9 @@ html,body,h1,h2,h3,p,div,span {
     padding: 0;
     color: #{color1};
 }
+html,body {
+    font-size: {font-size}px;
+}
 h1,h2,h3,p,div {
     font-weight: 100;
     margin: 0;
@@ -34,7 +37,7 @@ h1,h2,h3,p,div {
 	position: absolute;
     top: 27px;
     left: 79px;
-	font-size: 11px;
+	font-size: 75%;
 }
 .avatar {
 	position: absolute;
@@ -77,7 +80,8 @@ h1,h2,h3,p,div {
 }
 .article-group {
     {article-group-align}
-    width: 352px;
+    width: {group-width}px;
+    //height: {group-height}px;
     vertical-align: top;
 }
 .article-container {
@@ -93,8 +97,11 @@ h1,h2,h3,p,div {
 .article {
 	position: relative;
 }
+.article-big img {
+    height: {big-height}px;
+}
 .article-small img {
-    height: 199px;
+    height: {small-height}px;
 }
 .article > .add, .article .article-price, .article > .article-description {
 	visibility: hidden;
@@ -339,22 +346,27 @@ def css(params):
     layout = params['layout']
     font = params['font']
     col = params['color']
-    ss = idx_pick(ss, 'bar-transform',          layout%2,    'none~translateX(-50%) rotate(-90deg) translate(-50%,38px)')
-    ss = idx_pick(ss, 'bar-setup',              layout%2,    bar_top_css + '~' + bar_left_css)
-    ss = idx_pick(ss, 'cart-align',             layout%2,    'right~left')
-    ss = idx_pick(ss, 'cart-padding',           layout%2,    '15px 25px~10px 3px')
-    ss = idx_pick(ss, 'cart-border-col',        layout%2,    '3px solid #555~none')
-    ss = idx_pick(ss, 'cart-pop-top',           layout%2,    '70px~10px')
-    ss = idx_pick(ss, 'cart-pop-horiz',         layout%2,    'right: 10px~left: 80px')
-    ss = idx_pick(ss, 'cart-pop-arrow-setup',   layout%2,    cart_pop_arrow_top + '~' + cart_pop_arrow_left)
-    ss = idx_pick(ss, 'articles-margin',        layout%2,    'auto~0 0 0 100px')
-    ss = idx_pick(ss, 'article-price-xform',    layout%2,    '~transform: translate(18px,-18px) rotate(-90deg);')
-    ss = idx_pick(ss, 'article-group-align',    layout//2%2, 'display: inline-block;~float: left;')
-    ss = idx_pick(ss, 'article-desc-setup',     layout//4,   'margin-top: 5px;~' + article_desc)
-    ss = idx_pick(ss, 'color0',                 col//2%4,    'fff~222~fa9~fcf')
-    ss = idx_pick(ss, 'color1',                 col//2%4,    '222~fff~422~424')
-    ss = idx_pick(ss, 'color2',                 col//2%4,    '222~222~f86~f4f')
-    ss = idx_pick(ss, 'font-family',            font,        "'Segoe UI Light'~'Calibri Light'~'Yu Gothic'~Arial~'Times New Roman'~'Courier New'~'Lucinda Console'~Gothic~sans-serif")
+    size = params['size']
+    ss = idx_replace(ss, 'bar-transform',          layout%2,    'none~translateX(-50%) rotate(-90deg) translate(-50%,38px)')
+    ss = idx_replace(ss, 'bar-setup',              layout%2,    bar_top_css + '~' + bar_left_css)
+    ss = idx_replace(ss, 'cart-align',             layout%2,    'right~left')
+    ss = idx_replace(ss, 'cart-padding',           layout%2,    '15px 25px~10px 3px')
+    ss = idx_replace(ss, 'cart-border-col',        layout%2,    '3px solid #555~none')
+    ss = idx_replace(ss, 'cart-pop-top',           layout%2,    '70px~10px')
+    ss = idx_replace(ss, 'cart-pop-horiz',         layout%2,    'right: 10px~left: 80px')
+    ss = idx_replace(ss, 'cart-pop-arrow-setup',   layout%2,    cart_pop_arrow_top + '~' + cart_pop_arrow_left)
+    ss = idx_replace(ss, 'articles-margin',        layout%2,    'auto~0 0 0 100px')
+    ss = idx_replace(ss, 'article-price-xform',    layout%2,    '~transform: translate(18px,-18px) rotate(-90deg);')
+    ss = idx_replace(ss, 'article-group-align',    layout//2%2, 'display: inline-block;~float: left;')
+    ss = idx_replace(ss, 'article-desc-setup',     layout//4,   'margin-top: 5px;~' + article_desc)
+    ss = idx_replace(ss, 'color0',                 col//2%4,    'fff~222~fa9~fcf')
+    ss = idx_replace(ss, 'color1',                 col//2%4,    '222~fff~422~424')
+    ss = idx_replace(ss, 'color2',                 col//2%4,    '222~222~f86~f4f')
+    ss = idx_replace(ss, 'font-family',            font,        "'Segoe UI Light'~'Calibri Light'~'Yu Gothic'~Arial~'Times New Roman'~'Courier New'~'Lucinda Console'~Gothic~sans-serif")
+    ss,bh = idx_pick(ss, 'big-height',             size,        '405~445~485~365~325~301~285~271~263~241')
+    ss = idx_replace(ss, 'small-height',           size,        '198.5~218.5~238.5~178.5~158.5~146.5~138.5~131.5~127.5~116.5')
+    ss = ss.replace('{group-width}', str(int((int(bh)+8)*0.853)))
+    ss = ss.replace('{font-size}', str(int(bh)/29))
     return ss
 
 
@@ -371,4 +383,8 @@ def idx_pick(ss, name, idx, alternatives):
         outp = alts[idx]
     except:
         outp = alts[0]
-    return ss.replace('{%s}'%name, outp)
+    return ss.replace('{%s}'%name, outp), outp
+
+
+def idx_replace(ss, name, idx, alternatives):
+    return idx_pick(ss, name, idx, alternatives)[0]
