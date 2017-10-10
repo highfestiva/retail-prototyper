@@ -11,6 +11,8 @@ import sys
 
 
 app = Flask(__name__)
+app.jinja_env.trim_blocks = True
+app.jinja_env.lstrip_blocks = True
 app.config.update(
     SECRET_KEY = '=34(#ht¤os@ygv98u3.,423fgpa&/',
     GOOGLE_LOGIN_REDIRECT_SCHEME = 'http',
@@ -69,7 +71,8 @@ def content():
     theme = behavior.theme(params)
     css = behavior.css(params)
     arts = behavior.get_articles(params)
-    return render_template('content.html', theme=theme, css=css, articles=arts, user=session.get('user'))
+    article_groups = behavior.group_articles(params, arts)
+    return render_template('content.html', theme=theme, css=css, article_groups=article_groups, user=session.get('user'))
 
 
 @app.route('/cart', methods=['GET'])
@@ -79,7 +82,7 @@ def get_cart():
         cart = []
     arts = list(reversed([articles.find(a) for a in cart]))
     amount = sum(a['price'] for a in arts) * 100
-    print('cart:', arts)
+    #print('cart:', arts)
     return render_template('cart.html', articles=arts, amount=amount, currency='SEK', locale='sv')
 
 

@@ -29,20 +29,30 @@
 </div>
 
 <div class="articles">
-  {% for article in articles %}
-  <div class="article-container">
-    <div class="article article-small" data-articleId="{{article.articleId}}">
-      <div class="add"></div>
-      {% if article.imgs.1 %}
-      <div class="image-0"><img src="{{article.imgs.0}}"/></div>
-      <div class="image-1"><img src="{{article.imgs.1}}"/></div>
+  {% for article_group in article_groups %}
+  <div class="article-group">
+    {% for article in article_group %}
+    <div class="article-container">
+      {% if article_group|length == 1 %}
+      <div class="article article-big"   data-articleId="{{article.articleId}}">
       {% else %}
-      <div class="image"><img src="{{article.imgs.0}}"/></div>
+      <div class="article article-small" data-articleId="{{article.articleId}}">
       {% endif %}
-      <p class="article-name">{{article.name}}</p>
-      <p class="article-price">{{article.dispPrice}}</p>
-      <p class="article-description">{{article.description}}</p>
+        <div class="add"></div>
+        {% if article.imgs.1 %}
+        <div class="image-0"><img src="{{article.imgs.0}}"/></div>
+        <div class="image-1"><img src="{{article.imgs.1}}"/></div>
+        {% else %}
+        <div class="image"><img src="{{article.imgs.0}}"/></div>
+        {% endif %}
+        <div class="article-vitals">
+          <p class="article-name">{{article.name}}</p>
+          <p class="article-price">{{article.dispPrice}}</p>
+        </div>
+        <p class="article-description">{{article.description}}</p>
+      </div>
     </div>
+    {% endfor %}
   </div>
   {% endfor %}
 </div>

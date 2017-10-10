@@ -31,9 +31,9 @@ h1,h2,h3,p,div {
     color: #{color1};
 }
 .user > .logout {
-	position: relative;
-	top: 20px;
-	left: 78px;
+	position: absolute;
+    top: 27px;
+    left: 79px;
 	font-size: 11px;
 }
 .avatar {
@@ -75,10 +75,17 @@ h1,h2,h3,p,div {
 	margin: {articles-margin};
 	width: 94%;
 }
+.article-group {
+    {article-group-align}
+    width: 352px;
+    vertical-align: top;
+}
 .article-container {
-	display: inline-block;
+	float: left;
+    margin: 3px 2px;
 	border: 1px solid #fff;
 	cursor: pointer;
+    vertical-align: top;
 }
 .article-container:hover {
 	border: 1px solid #ddd;
@@ -86,15 +93,21 @@ h1,h2,h3,p,div {
 .article {
 	position: relative;
 }
-.article > .add, .article > .article-price, .article > .article-description {
+.article-small img {
+    height: 199px;
+}
+.article > .add, .article .article-price, .article > .article-description {
 	visibility: hidden;
 }
-.article:hover > .add, .article:hover > .article-price, .article:hover > .article-description {
+.article:hover > .add, .article:hover .article-price, .article:hover > .article-description {
 	visibility: visible;
 }
 .article:active > .add {
 	border-color: #0a4;
 	background: #0a4;
+}
+.article-vitals {
+    position: relative;
 }
 .article-name, .article-price, .article-description {
 	position: absolute;
@@ -104,27 +117,36 @@ h1,h2,h3,p,div {
 	border-radius: 3px;
 	transform: skew(-15deg);
 	opacity: 0.8;
-	margin-top: -22px;
 	z-index: 1;
 }
 .article-name {
 	left: 0;
+    bottom: 0;
 }
 .article-price {
 	right: 0;
+    bottom: 0;
+    background-color: #029;
+    {article-price-xform}
 }
 .article-description {
-	margin-top: 5px;
 	transform: none;
+    text-align: justify;
+    z-index: 5;
+}
+.article > .article-description {
+	transform: none;
+    {article-desc-setup}
 }
 .add {
 	height: 40px;
 	width: 40px;
 	position: absolute;
+    right: 0;
 	border: 8px solid #0c7;
 	background: #0c7;
 	border-radius: 11px 0 11px 20px;
-	margin: -1px 0 0 291px;
+	margin: -1px -1px 0 291px;
 	z-index: 5;
 }
 .add:hover {
@@ -237,11 +259,23 @@ h1,h2,h3,p,div {
 }'''
 
 
-bar_setup_css = '''
+bar_top_css = '''
+    margin-bottom: 10px;'''
+
+bar_left_css = '''
     position: fixed;
     width: 101vh;
     height: 76px;
     margin-top: -38px;'''
+
+
+article_desc = '''
+    position: relative;
+    visibility: visible;
+    opacity: 1;
+    border-radius: 0;
+    background-color: #fff;
+    color: #{color2};'''
 
 
 cart_pop_arrow_top = '''
@@ -250,7 +284,6 @@ cart_pop_arrow_top = '''
 	border-left: 10px solid transparent;
 	border-right: 10px solid transparent;
 	border-bottom: 10px solid #555;'''
-
 
 cart_pop_arrow_left = '''
 	margin: -5px -33px;
@@ -280,7 +313,25 @@ def get_articles(params):
         random.shuffle(arts)
     else:
         arts = arts[10*ordering:]
-    return arts[:20]
+    layout = params['layout']
+    cnt = 20 if not layout//2%2 else 71
+    return arts[:cnt]
+
+
+def group_articles(params, articles):
+    layout = params['layout']
+    if not layout//2%2:
+        return [[a] for a in articles]
+    # grouped layout
+    locations = (3, 7, 14)
+    groups = [[]]
+    for a in articles:
+        groups[-1] += [a]
+        if len(groups) in locations:
+            groups += [[]]
+        elif len(groups[-1]) == 4:
+            groups += [[]]
+    return groups
 
 
 def css(params):
@@ -288,18 +339,22 @@ def css(params):
     layout = params['layout']
     font = params['font']
     col = params['color']
-    ss = idx_pick(ss, 'bar-transform',          layout,     'none~translateX(-50%) rotate(-90deg) translate(-50%,38px)')
-    ss = idx_pick(ss, 'bar-setup',              layout,     '~'+bar_setup_css)
-    ss = idx_pick(ss, 'cart-align',             layout,     'right~left')
-    ss = idx_pick(ss, 'cart-padding',           layout,     '15px 25px~10px 3px')
-    ss = idx_pick(ss, 'cart-border-col',        layout,     '3px solid #555~none')
-    ss = idx_pick(ss, 'cart-pop-top',           layout,     '70px~10px')
-    ss = idx_pick(ss, 'cart-pop-horiz',         layout,     'right: 10px~left: 80px')
-    ss = idx_pick(ss, 'cart-pop-arrow-setup',   layout,     cart_pop_arrow_top + '~' + cart_pop_arrow_left)
-    ss = idx_pick(ss, 'articles-margin',        layout,     'auto~0 0 0 100px')
-    ss = idx_pick(ss, 'color0',                 col//2%4,   'fff~222~fa9~fcf')
-    ss = idx_pick(ss, 'color1',                 col//2%4,   '222~fff~422~424')
-    ss = idx_pick(ss, 'font-family',            font,       "'Segoe UI Light'~'Calibri Light'~'Yu Gothic'~Arial~'Times New Roman'~'Courier New'~'Lucinda Console'~Gothic~sans-serif")
+    ss = idx_pick(ss, 'bar-transform',          layout%2,    'none~translateX(-50%) rotate(-90deg) translate(-50%,38px)')
+    ss = idx_pick(ss, 'bar-setup',              layout%2,    bar_top_css + '~' + bar_left_css)
+    ss = idx_pick(ss, 'cart-align',             layout%2,    'right~left')
+    ss = idx_pick(ss, 'cart-padding',           layout%2,    '15px 25px~10px 3px')
+    ss = idx_pick(ss, 'cart-border-col',        layout%2,    '3px solid #555~none')
+    ss = idx_pick(ss, 'cart-pop-top',           layout%2,    '70px~10px')
+    ss = idx_pick(ss, 'cart-pop-horiz',         layout%2,    'right: 10px~left: 80px')
+    ss = idx_pick(ss, 'cart-pop-arrow-setup',   layout%2,    cart_pop_arrow_top + '~' + cart_pop_arrow_left)
+    ss = idx_pick(ss, 'articles-margin',        layout%2,    'auto~0 0 0 100px')
+    ss = idx_pick(ss, 'article-price-xform',    layout%2,    '~transform: translate(18px,-18px) rotate(-90deg);')
+    ss = idx_pick(ss, 'article-group-align',    layout//2%2, 'display: inline-block;~float: left;')
+    ss = idx_pick(ss, 'article-desc-setup',     layout//4,   'margin-top: 5px;~' + article_desc)
+    ss = idx_pick(ss, 'color0',                 col//2%4,    'fff~222~fa9~fcf')
+    ss = idx_pick(ss, 'color1',                 col//2%4,    '222~fff~422~424')
+    ss = idx_pick(ss, 'color2',                 col//2%4,    '222~222~f86~f4f')
+    ss = idx_pick(ss, 'font-family',            font,        "'Segoe UI Light'~'Calibri Light'~'Yu Gothic'~Arial~'Times New Roman'~'Courier New'~'Lucinda Console'~Gothic~sans-serif")
     return ss
 
 
