@@ -239,7 +239,7 @@ h1,h2,h3,p,div {
     width: 40px;
 }
 .cart-image>img {
-	height: 70px;
+	height: {cart-image-height}px;
 }
 .cart-article-button {
 	width: 20px;
@@ -365,8 +365,10 @@ def css(params):
     ss = idx_replace(ss, 'font-family',            font,        "'Segoe UI Light'~'Calibri Light'~'Yu Gothic'~Arial~'Times New Roman'~'Courier New'~'Lucinda Console'~Gothic~sans-serif")
     ss,bh = idx_pick(ss, 'big-height',             size,        '405~445~485~365~325~301~285~271~263~241')
     ss = idx_replace(ss, 'small-height',           size,        '198.5~218.5~238.5~178.5~158.5~146.5~138.5~131.5~127.5~116.5')
-    ss = ss.replace('{group-width}', str(int((int(bh)+8)*0.853)))
-    ss = ss.replace('{font-size}', str(int(bh)/29))
+    bh = int(bh)
+    ss = ss.replace('{group-width}', str(int((bh+8)*0.853)))
+    ss = ss.replace('{font-size}', str(bh/29))
+    ss = ss.replace('{cart-image-height}', str(int(bh/5.7)))
     return ss
 
 

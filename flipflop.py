@@ -4,6 +4,7 @@ import articles
 import behavior
 from collections import OrderedDict
 from flask import Flask, make_response, redirect, render_template, request, send_from_directory, session
+from flask_cors import CORS
 from flask_oauth2_login import GoogleLogin
 import os
 import random
@@ -13,6 +14,7 @@ import sys
 app = Flask(__name__)
 app.jinja_env.trim_blocks = True
 app.jinja_env.lstrip_blocks = True
+CORS(app)
 app.config.update(
     SECRET_KEY = '=34(#ht¤os@ygv98u3.,423fgpa&/',
     GOOGLE_LOGIN_REDIRECT_SCHEME = 'http',

@@ -40,22 +40,13 @@ function placeInCart(node, complete, topOff, leftOff, height, endOpacity, cartTo
 
 function updateCart() {
   $.get('/cart', function(data) {
-  _('.cart-pop-content').html(data);
+    _('.cart-pop-content').html(data);
   });
 }
 
 $(document).ready(function() {
-  var iframe = $('iframe.retail-content');
-  if (iframe.length == 0) {
-    contentReady();
-  } else {
-    contentReady();
-  }
-});
-
-function contentReady() {
   _('.article').click(function () {
     placeInCart($(this), updateCart, 0,0, '400px', '0.4', 0, 30, 75, 1000);
   });
   updateCart();
-}
+});
