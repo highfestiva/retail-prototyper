@@ -1,4 +1,5 @@
 import articles
+from functools import partial
 import random
 
 
@@ -300,7 +301,7 @@ cart_pop_arrow_left = '''
 	border-right: 10px solid #555;'''
 
 
-def get_articles(params):
+def get_articles(session, params):
     tags = articles.all_tags()
     # Category selection.
     category = params['category']
@@ -313,10 +314,23 @@ def get_articles(params):
     # Ordering.
     ordering = params['ordering']
     if ordering == 0:
-        pass
+        hist = session.get('histogram')
+        if hist:
+            def cmphist(h1, art):
+                diff = 1e5
+                if 'histogram' in art:
+                    h2 = art['histogram']
+                    print('article histogram:', h2)
+                    for (r1,g1,b1),(r2,g2,b2) in zip(h1,h2):
+                        diff += (r1-r2)**2 + (g1-g2)**2 + (b1-b2)**2
+                return diff
+            print('session histogram:', hist)
+            arts = sorted(arts, key=partial(cmphist, hist))
     elif ordering == 1:
-        arts = list(reversed(arts))
+        pass
     elif ordering == 2:
+        arts = list(reversed(arts))
+    elif ordering == 3:
         random.shuffle(arts)
     else:
         arts = arts[10*ordering:]
@@ -339,6 +353,21 @@ def group_articles(params, articles):
         elif len(groups[-1]) == 4:
             groups += [[]]
     return groups
+
+
+def interesting_good(session, article_id):
+    '''Some customer showed interest in article_id. That information could be used in any elaborate way, but in
+       this scenario we only look at the color histogram, assuming the customer will be interesting in similar-colored
+       articles. That assumption is probably flawed in pretty much all of retail, including the clothing industry,
+       but it makes for a good demo-able effect.'''
+    art = articles.all_articles[article_id]
+    if 'histogram' in art:
+        lerp = lambda t,a,b: (1-t)*a + t*b
+        hist = from_hist = art['histogram']
+        if 'histogram' in session:
+            from_hist = session['histogram']
+        hist = [[lerp(0.5,v1,v2) for v1,v2 in zip(h,fh)] for h,fh in zip(hist,from_hist)] # lerp all rgbs
+        session['histogram'] = hist
 
 
 def css(params):

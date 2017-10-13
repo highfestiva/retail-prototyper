@@ -72,7 +72,7 @@ def content():
     params = { name:int(request.values.get(name,0)) for name in settings.lower().split() }
     theme = behavior.theme(params)
     css = behavior.css(params)
-    arts = behavior.get_articles(params)
+    arts = behavior.get_articles(session, params)
     article_groups = behavior.group_articles(params, arts)
     return render_template('content.html', theme=theme, css=css, article_groups=article_groups, user=session.get('user'))
 
@@ -98,6 +98,7 @@ def put_in_cart():
     if not cart:
         cart = []
     cart += [article_id]
+    behavior.interesting_good(session, article_id)
     session['cart'] = cart
     return 'ok'
 
